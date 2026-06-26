@@ -87,7 +87,7 @@ public class MyDodo extends Dodo
         return new ArrayList<> (Arrays.asList( 2, 43, 7, -5, 12, 7 ));
     }
     
-
+    
     /**
      * Method for praciticing with lists.
      */
@@ -98,5 +98,18 @@ public class MyDodo extends Dodo
 
     public void practiceWithListsOfSurpriseEgss( ){
         List<SurpriseEgg>  listOfEgss = SurpriseEgg.generateListOfSurpriseEggs( 12, getWorld() );
+    }
+    public void getScore(int score1, int score2){
+        ((Mauritius)getWorld()).updateScore(score1, score2);
+    }
+    public void moveRandomly(){
+        while(myNrOfStepsTaken < Mauritius.MAXSTEPS){
+            if(canMove()){
+                setDirection(randomDirection());
+                myNrOfStepsTaken++;
+                move();
+            }
+            getScore((40 - myNrOfStepsTaken), 0);
+        }
     }
 }
