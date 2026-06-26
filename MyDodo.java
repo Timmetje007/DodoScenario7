@@ -104,8 +104,8 @@ public class MyDodo extends Dodo
     }
     public void moveRandomly(){
         while(myNrOfStepsTaken < Mauritius.MAXSTEPS){
+            setDirection(randomDirection());
             if(canMove()){
-                setDirection(randomDirection());
                 myNrOfStepsTaken++;
                 move();
             }
