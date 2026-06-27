@@ -109,7 +109,53 @@ public class MyDodo extends Dodo
                 myNrOfStepsTaken++;
                 move();
             }
-            getScore((40 - myNrOfStepsTaken), 0);
+            getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
+        }
+    }
+    public void goToLocation(int coordX, int coordY){
+        int totaalX = getX() - coordX;
+        int totaalY = getY() - coordY;
+        
+        if(totaalX > 0){
+            setDirection(WEST);
+            for(int i = 1; i <= totaalX; i++){
+                move();
+            }
+        }
+        if(totaalX < 0){
+            setDirection(EAST);
+            for(int i = totaalX; i <= -1; i++){
+                move();
+            }
+        }
+        if(totaalY > 0){
+            setDirection(NORTH);
+            for(int i = 1; i <= totaalY; i++){
+                move();
+            }
+        }
+        if(totaalY < 0){
+            setDirection(SOUTH);
+            for(int i = totaalY; i <= -1; i++){
+                move();
+            }
+        }
+    }
+    /**
+     * berekent het dichtbij zijnde ei en gaat er na toe.
+     * 
+     * <p> Initial: overal in de wereld waar dodo in zit  
+     * <p> Final:  is op het dichtbij zijnde ei en heeft het opgepakt
+     * 
+     * @param   Egg egg: welk ei het is
+     */
+    public void pickUpClosestEgg(){
+        int eggX;
+        int eggY;
+        for(Egg egg : getListOfEggsInWorld()){
+            
+            goToLocation(egg.getX(), egg.getY());
+            pickUpEgg();
         }
     }
 }

@@ -27,4 +27,5 @@ public class BlueEgg extends Egg
             mayBeNest.addEgg();
         }        
     }
+    
 }

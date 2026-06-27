@@ -223,5 +223,4 @@ public class Mauritius extends World
     private static void showError( World world, String err_msg ) {
         Message.showMessage(  new Alert (err_msg), world );
     }
-        
 }
