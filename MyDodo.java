@@ -115,29 +115,37 @@ public class MyDodo extends Dodo
     public void goToLocation(int coordX, int coordY){
         int totaalX = getX() - coordX;
         int totaalY = getY() - coordY;
-        
+        int stepsTaken = 0;
         if(totaalX > 0){
             setDirection(WEST);
             for(int i = 1; i <= totaalX; i++){
                 move();
+                myNrOfStepsTaken++;
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
             }
         }
         if(totaalX < 0){
             setDirection(EAST);
             for(int i = totaalX; i <= -1; i++){
                 move();
+                myNrOfStepsTaken++;
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
             }
         }
         if(totaalY > 0){
             setDirection(NORTH);
             for(int i = 1; i <= totaalY; i++){
                 move();
+                myNrOfStepsTaken++;
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
             }
         }
         if(totaalY < 0){
             setDirection(SOUTH);
             for(int i = totaalY; i <= -1; i++){
                 move();
+                myNrOfStepsTaken++;
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
             }
         }
     }
@@ -148,13 +156,50 @@ public class MyDodo extends Dodo
      * <p> Final:  is op het dichtbij zijnde ei en heeft het opgepakt
      * 
      * @param   Egg egg: welk ei het is
+     *          int eggX: x cordinaat van het ei
+     *          int eggY: y cordinaat van het ei
+     *          int eggCloseTijdelijkX: berekent stappen naar het ei op de x as
+     *          int eggCloseTijdelijkY: berekent stappen naar het ei op de Y as
+     *          int totaalStappenToEgg: het totaal aantal stappen naar
+     *                                  het opgeslagen ei
+     *          int totaalStappenToEggTijdelijk: het totaal aantal stappen naar
+     *                                  het ei dat net berekent is.
      */
     public void pickUpClosestEgg(){
-        int eggX;
-        int eggY;
+        int eggX = 100;
+        int eggY = 100;
+        int eggCloseTijdelijkX;
+        int eggCloseTijdelijkY;
+        int totaalStappenToEgg = 100;
+        int totaalStappenToEggTijdelijk;
         for(Egg egg : getListOfEggsInWorld()){
-            
-            goToLocation(egg.getX(), egg.getY());
+            if(getX() > egg.getX()){
+                eggCloseTijdelijkX = getX() - egg.getX();
+            } else if(getX() < egg.getX()){
+                eggCloseTijdelijkX = egg.getX() - getX();
+            } else {
+                eggCloseTijdelijkX = 0;
+            }
+            if(getY() > egg.getY()){
+                eggCloseTijdelijkY = getY() - egg.getY();
+            } else if(getY() < egg.getY()){
+                eggCloseTijdelijkY = egg.getY() - getY();
+            } else {
+                eggCloseTijdelijkY = 0;
+            }
+            totaalStappenToEggTijdelijk = eggCloseTijdelijkX + eggCloseTijdelijkY;
+            if(totaalStappenToEgg > totaalStappenToEggTijdelijk){
+                totaalStappenToEgg = totaalStappenToEggTijdelijk;
+                eggX = egg.getX();
+                eggY = egg.getY();
+            } else if(totaalStappenToEgg == 100){
+                totaalStappenToEgg = totaalStappenToEggTijdelijk;
+                eggX = egg.getX();
+                eggY = egg.getY();
+            }
+        }
+        if(!(eggX == 100) || !(eggY == 100)){
+            goToLocation(eggX, eggY);
             pickUpEgg();
         }
     }
