@@ -12,7 +12,8 @@ public class MyDodo extends Dodo
 {
     /* ATTRIBUTE DECLARATIONS: */
     private int myNrOfStepsTaken;
-           
+    private int myScore = 0;
+    
     public MyDodo() {
         super( EAST );
         /* INITIALISATION OF ATTRIBUTES: */
@@ -109,7 +110,7 @@ public class MyDodo extends Dodo
                 myNrOfStepsTaken++;
                 move();
             }
-            getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
+            getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), myScore);
         }
     }
     public void goToLocation(int coordX, int coordY){
@@ -121,7 +122,7 @@ public class MyDodo extends Dodo
             for(int i = 1; i <= totaalX; i++){
                 move();
                 myNrOfStepsTaken++;
-                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), myScore);
             }
         }
         if(totaalX < 0){
@@ -129,7 +130,7 @@ public class MyDodo extends Dodo
             for(int i = totaalX; i <= -1; i++){
                 move();
                 myNrOfStepsTaken++;
-                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), myScore);
             }
         }
         if(totaalY > 0){
@@ -137,7 +138,7 @@ public class MyDodo extends Dodo
             for(int i = 1; i <= totaalY; i++){
                 move();
                 myNrOfStepsTaken++;
-                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), myScore);
             }
         }
         if(totaalY < 0){
@@ -145,7 +146,7 @@ public class MyDodo extends Dodo
             for(int i = totaalY; i <= -1; i++){
                 move();
                 myNrOfStepsTaken++;
-                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), 0);
+                getScore((Mauritius.MAXSTEPS - myNrOfStepsTaken), myScore);
             }
         }
     }
@@ -170,6 +171,7 @@ public class MyDodo extends Dodo
         int eggY = 100;
         int eggCloseTijdelijkX;
         int eggCloseTijdelijkY;
+        int eggValue = 0;
         int totaalStappenToEgg = 100;
         int totaalStappenToEggTijdelijk;
         for(Egg egg : getListOfEggsInWorld()){
@@ -190,17 +192,75 @@ public class MyDodo extends Dodo
             totaalStappenToEggTijdelijk = eggCloseTijdelijkX + eggCloseTijdelijkY;
             if(totaalStappenToEgg > totaalStappenToEggTijdelijk){
                 totaalStappenToEgg = totaalStappenToEggTijdelijk;
+                eggValue = egg.getValue();
                 eggX = egg.getX();
                 eggY = egg.getY();
             } else if(totaalStappenToEgg == 100){
                 totaalStappenToEgg = totaalStappenToEggTijdelijk;
+                eggValue = egg.getValue();
                 eggX = egg.getX();
                 eggY = egg.getY();
             }
         }
         if(!(eggX == 100) || !(eggY == 100)){
+            myScore += eggValue;
             goToLocation(eggX, eggY);
+            System.out.println(onEgg());
             pickUpEgg();
+        }
+    }
+    public void algoritmeDodoRace(){
+        int eggX = 100;
+        int eggY = 100;
+        int eggCloseTijdelijkX;
+        int eggCloseTijdelijkY;
+        int totaalStappenToEgg = 100;
+        int totaalStappenToEggTijdelijk;
+        double meesteWaard = 0.0;
+        double meesteWaardTijdelijk = 0.0;
+        int eggValue = 0;
+        while(40 > myNrOfStepsTaken){
+            for(Egg egg : getListOfEggsInWorld()){
+                if(getX() > egg.getX()){
+                    eggCloseTijdelijkX = getX() - egg.getX();
+                } else if(getX() < egg.getX()){
+                    eggCloseTijdelijkX = egg.getX() - getX();
+                } else {
+                    eggCloseTijdelijkX = 0;
+                }
+                if(getY() > egg.getY()){
+                    eggCloseTijdelijkY = getY() - egg.getY();
+                } else if(getY() < egg.getY()){
+                    eggCloseTijdelijkY = egg.getY() - getY();
+                } else {
+                    eggCloseTijdelijkY = 0;
+                }
+                totaalStappenToEggTijdelijk = eggCloseTijdelijkX + eggCloseTijdelijkY;
+                meesteWaardTijdelijk = (double)egg.getValue() / (double)totaalStappenToEggTijdelijk;
+                if(meesteWaard < meesteWaardTijdelijk && 40 > (myNrOfStepsTaken + totaalStappenToEggTijdelijk)){
+                    totaalStappenToEgg = totaalStappenToEggTijdelijk;
+                    meesteWaard = meesteWaardTijdelijk;
+                    eggValue = egg.getValue();
+                    System.out.println(meesteWaard);
+                    eggX = egg.getX();
+                    eggY = egg.getY();
+                } else if(totaalStappenToEgg == 100 && meesteWaard == 0.0){
+                    totaalStappenToEgg = totaalStappenToEggTijdelijk;
+                    meesteWaard = meesteWaardTijdelijk;
+                    eggValue = egg.getValue();
+                    eggX = egg.getX();
+                    eggY = egg.getY();
+                }
+            }
+            if(meesteWaard == 0.0){
+                moveRandomly();
+            } else if(!(eggX == 100) || !(eggY == 100)){
+                myScore += eggValue;
+                goToLocation(eggX, eggY);
+                System.out.println(onEgg());
+                pickUpEgg();
+            }
+            System.out.println(onEgg());
         }
     }
 }

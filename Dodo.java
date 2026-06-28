@@ -82,6 +82,7 @@ public abstract class Dodo extends Actor
             Greenfoot.stop();
         } else {
             removeActor( maybeEgg );
+            
         }
         return maybeEgg;
     }
