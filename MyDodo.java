@@ -241,10 +241,9 @@ public class MyDodo extends Dodo
                     totaalStappenToEgg = totaalStappenToEggTijdelijk;
                     meesteWaard = meesteWaardTijdelijk;
                     eggValue = egg.getValue();
-                    System.out.println(meesteWaard);
                     eggX = egg.getX();
                     eggY = egg.getY();
-                } else if(totaalStappenToEgg == 100 && meesteWaard == 0.0){
+                } else if(totaalStappenToEgg == 100 && meesteWaard == 0.0 && 40 > (myNrOfStepsTaken + totaalStappenToEggTijdelijk)){
                     totaalStappenToEgg = totaalStappenToEggTijdelijk;
                     meesteWaard = meesteWaardTijdelijk;
                     eggValue = egg.getValue();
@@ -257,10 +256,13 @@ public class MyDodo extends Dodo
             } else if(!(eggX == 100) || !(eggY == 100)){
                 myScore += eggValue;
                 goToLocation(eggX, eggY);
-                System.out.println(onEgg());
                 pickUpEgg();
             }
-            System.out.println(onEgg());
+            totaalStappenToEgg = 100;
+            meesteWaard = 0.0;
+            meesteWaardTijdelijk = 0.0;
+            eggX = 100;
+            eggY = 100;
         }
     }
 }
